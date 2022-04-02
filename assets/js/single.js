@@ -7,10 +7,19 @@ var getRepoName = function (){
     var queryString = document.location.search;
     //splits the string into 2 arrays and then gives us the second item
     var repoName = queryString.split("=")[1];
-//console.log(repoName);
+    //console.log(repoName);
 
-getRepoIssues(repoName);
-repoNameEl.textContent = repoName;
+    //checks for valid values before passing them into their respective function calls (ERROR HANDLING)
+    if(repoName) {
+        //displays repo name on the homepage
+        repoNameEl.textContent = repoName;
+        getRepoIssues(repoName);
+      }
+
+      //redirects user back to main page if no repo was given
+      else {
+        document.location.replace("./index.html");
+      }  
 }
 var getRepoIssues = function(repo) {   
     // 1) create variable to hold the query
@@ -34,8 +43,8 @@ var getRepoIssues = function(repo) {
       });
     }
     else {
-        console.log(response);  
-      alert("There was a problem with your request!");
+        //if not successful, redirect to homepage
+        document.location.replace("./index.html");
     }
   });
   };
