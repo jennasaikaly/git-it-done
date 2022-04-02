@@ -65,9 +65,16 @@ for (var i = 0; i < repos.length; i++) {
   // format appearance of the name and repository name
   var repoName = repos[i].owner.login + "/" + repos[i].name;
 
-  // create and style a div element (container) for each repo
-  var repoEl = document.createElement("div");
-  repoEl.classList = "list-item flex-row justify-space-between align-center";
+  //**old**/ create and style a div element (container) for each repo 
+    //var repoEl = document.createElement("div");
+  //repoEl.classList = "list-item flex-row justify-space-between align-center";
+//** updated so that we can create a link between our 2 pages */
+// create a container for each repo
+
+var repoEl = document.createElement("a");
+repoEl.classList = "list-item flex-row justify-space-between align-center";
+//links to our single repo page; query parameter specifies repo name
+repoEl.setAttribute("href", "./single-repo.html?repo=" +repoName);
 
   // create a span element to hold repository name
   var titleEl = document.createElement("span");

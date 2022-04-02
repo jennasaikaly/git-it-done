@@ -1,7 +1,18 @@
 var issueContainerEl = document.querySelector("#issues-container");
+var limitWarningEl = document.querySelector("#limit-warning");
+var repoNameEl = document.querySelector("#repo-name");
 
-var getRepoIssues = function(repo) {
-   
+var getRepoName = function (){
+    //stores the query string in a variable
+    var queryString = document.location.search;
+    //splits the string into 2 arrays and then gives us the second item
+    var repoName = queryString.split("=")[1];
+//console.log(repoName);
+
+getRepoIssues(repoName);
+repoNameEl.textContent = repoName;
+}
+var getRepoIssues = function(repo) {   
     // 1) create variable to hold the query
     var apiUrl = "https://api.github.com/repos/" + repo + "/issues?direction=asc";
  // 2) build out a basic HTTP request to hit this endpoint and check the information returned in the response.
@@ -15,6 +26,11 @@ var getRepoIssues = function(repo) {
           // 5) initially was a console.log but was updated once displayIssues () was created.
        //console.log(data);
           displayIssues(data);  
+
+          // check if api has paginated issues
+        if (response.headers.get("Link")) {
+            displayWarning(repo);
+      }
       });
     }
     else {
@@ -24,9 +40,7 @@ var getRepoIssues = function(repo) {
   });
   };
   
-  
-
-// 4) Create displayIssues function that receives 'issues' as a paramenter;
+  // 4) Create displayIssues function that receives 'issues' as a paramenter;
 // 5) update getRepoInfo () to call this function 
   var displayIssues = function(issues) {
  //8)  if a repo has no open issues
@@ -70,5 +84,22 @@ issueEl.appendChild(typeEl);
 issueContainerEl.appendChild(issueEl);
  }
 };
-//hardcore
-getRepoIssues("jennasaikaly/portfolio");
+
+
+var displayWarning = function(repo) {
+    // add text to warning container
+    limitWarningEl.textContent = "To see more than 30 issues, visit ";
+
+    var linkEl = document.createElement("a");
+    linkEl.textContent = "See More Issues on GitHub.com";
+    linkEl.setAttribute("href", "https://github.com/" + repo + "/issues");
+    linkEl.setAttribute("target", "_blank");
+  
+    // append to warning container
+    limitWarningEl.appendChild(linkEl);
+  };
+  
+
+  getRepoName();
+  //hardcode
+//getRepoIssues("expressjs/express");
